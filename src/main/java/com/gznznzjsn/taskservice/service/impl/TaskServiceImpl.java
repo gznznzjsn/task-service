@@ -7,6 +7,8 @@ import com.gznznzjsn.taskservice.service.TaskService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -18,17 +20,19 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public Task get(Long taskId) {
-        return null;
-//        return taskRepository.findById(taskId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Task with id=" + taskId + " not found!"));
-
+    public Mono<Task> get(Long taskId) {
+        return taskRepository
+                .findById(taskId)
+                .switchIfEmpty(Mono.error(
+                        new ResourceNotFoundException("Task with id=" + taskId + " not found!")
+                ));
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public List<Task> getByAssignment(Long assignmentId) {
-        return null;
-//        return taskRepository.findAllByAssignmentId(assignmentId);
+    public Flux<Task> getAllIn(List<Long> taskIds) {
+        return Flux.fromIterable(taskIds)
+                .flatMap(this::get);
     }
 
 }

@@ -2,13 +2,16 @@ package com.gznznzjsn.taskservice.service;
 
 
 import com.gznznzjsn.taskservice.domain.Task;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
 public interface TaskService {
 
-    Task get(Long id);
+    Mono<Task> get(Long id);
 
-    List<Task> getByAssignment(Long assignmentId);
+
+    Flux<Task> getAllIn(List<Long> taskIds);
 
 }
