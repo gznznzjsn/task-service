@@ -1,4 +1,4 @@
-package com.gznznzjsn.taskservice.kafka;
+package com.gznznzjsn.taskservice.web.kafka;
 
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
