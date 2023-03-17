@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.kafka.receiver.KafkaReceiver;
 
-@RequiredArgsConstructor
 @Component
+@RequiredArgsConstructor
 public class TaskReceiver {
 
     private final KafkaReceiver<String, Long> receiver;

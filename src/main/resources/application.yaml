@@ -24,3 +24,6 @@ eureka:
   instance:
     prefer-ip-address: true
 
+settings:
+  requirementProducer: classpath:kafka/requirementProducer.xml
+  taskConsumer: classpath:kafka/taskConsumer.xml
