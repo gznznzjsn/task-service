@@ -8,4 +8,5 @@ public interface RequirementService {
     Flux<Requirement> retrieveAllByTaskId(Long taskId);
 
     Flux<Requirement> sendRequirements(Long taskId);
+
 }
