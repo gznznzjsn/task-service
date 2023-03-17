@@ -3,9 +3,9 @@ package com.gznznzjsn.taskservice.web.kafka;
 import com.gznznzjsn.taskservice.domain.Requirement;
 import com.gznznzjsn.taskservice.web.kafka.parser.XMLParser;
 import com.jcabi.xml.XML;
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
@@ -16,13 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
+@RequiredArgsConstructor
 public class RequirementProducerConfig {
 
     private final XML requirementProducerSettings;
-
-    public RequirementProducerConfig(@Qualifier("requirementProducerSettings") XML requirementProducerSettings) {
-        this.requirementProducerSettings = requirementProducerSettings;
-    }
 
     @Bean
     public NewTopic tasksTopic() {

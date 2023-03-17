@@ -17,13 +17,13 @@ public class WebConfig {
     @Value("${settings.taskConsumer}")
     private String taskConsumerPath;
 
-    @Bean(name = "requirementProducerSettings")
+    @Bean
     @SneakyThrows
     public XML requirementProducerSettings() {
         return new XMLDocument(ResourceUtils.getFile(requirementProducerPath));
     }
 
-    @Bean(name = "taskConsumerSettings")
+    @Bean
     @SneakyThrows
     public XML taskConsumerSettings() {
         return new XMLDocument(ResourceUtils.getFile(taskConsumerPath));

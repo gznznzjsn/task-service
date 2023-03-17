@@ -17,7 +17,6 @@ public class TaskReceiver {
     public void fetch() {
         this.receiver.receive()
                 .subscribe(record -> {
-                    System.out.println(record);
                     record.receiverOffset().acknowledge();
                     requirementService.sendRequirements(record.value())
                             .subscribe();

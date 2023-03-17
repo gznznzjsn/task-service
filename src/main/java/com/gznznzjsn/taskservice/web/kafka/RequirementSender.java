@@ -13,7 +13,7 @@ import reactor.kafka.sender.SenderRecord;
 @RequiredArgsConstructor
 public class RequirementSender {
 
-    private final XML taskProducerSettings;
+    private final XML requirementProducerSettings;
     private final KafkaSender<String, Requirement> sender;
 
     public void send(Requirement requirement) {
@@ -23,14 +23,11 @@ public class RequirementSender {
                                 "requirement",
                                 0,
                                 System.currentTimeMillis(),
-                                new XMLParser(taskProducerSettings).parse("requirementKey"),
+                                new XMLParser(requirementProducerSettings).parse("requirementKey"),
                                 requirement,
                                 null
                         )
-                ).map(o -> {
-                    System.out.println("Sent "+ o);
-                    return o;
-                })
+                )
         ).subscribe();
     }
 
