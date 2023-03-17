@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<requirementProducer>
+    <requirementKey>requirement</requirementKey>
+    <bootstrapServers>localhost:9092</bootstrapServers>
+    <keySerializerClass>org.apache.kafka.common.serialization.StringSerializer</keySerializerClass>
+    <valueSerializerClass>org.springframework.kafka.support.serializer.JsonSerializer</valueSerializerClass>
+</requirementProducer>

@@ -8,21 +8,18 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.math.BigDecimal;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table("tasks")
-public class Task {
+@Table("requirements")
+public class Requirement {
 
     @Id
-    @Column("task_id")
+    @Column("requirement_id")
     private Long id;
-    private String name;
-    private Integer duration;
-    private BigDecimal costPerHour;
-    private Specialization specialization;
+    private Task task;
+    private ConsumableType consumableType;
+    private Long requiredQuantity;
 
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taskConsumer>
+    <requiredTaskKey>requiredTask</requiredTaskKey>
+    <groupId>taskConsumer</groupId>
+    <bootstrapServers>localhost:9092</bootstrapServers>
+    <keyDeserializerClass>org.apache.kafka.common.serialization.StringDeserializer</keyDeserializerClass>
+    <valueDeserializerClass>org.apache.kafka.common.serialization.LongDeserializer</valueDeserializerClass>
+</taskConsumer>
