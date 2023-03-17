@@ -10,7 +10,6 @@ public interface TaskService {
 
     Mono<Task> get(Long id);
 
-
     Flux<Task> getAllIn(List<Long> taskIds);
 
 }
