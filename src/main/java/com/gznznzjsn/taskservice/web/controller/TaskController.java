@@ -5,11 +5,9 @@ import com.gznznzjsn.taskservice.service.TaskService;
 import com.gznznzjsn.taskservice.web.dto.TaskDto;
 import com.gznznzjsn.taskservice.web.dto.mapper.TaskMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -22,8 +20,16 @@ public class TaskController {
     private final TaskMapper taskMapper;
 
     @GetMapping
-    public Flux<TaskDto> getTasks(@RequestParam("taskId") List<Long> taskIds) {
+    public Flux<TaskDto> getAllIn(@RequestParam("taskId") List<String> taskIds) {
         return taskService.getAllIn(taskIds)
+                .map(taskMapper::toDto);
+    }
+
+    @PostMapping
+    public Mono<TaskDto> create(@RequestBody TaskDto taskDto) {
+        return Mono.just(taskDto)
+                .map(taskMapper::toEntity)
+                .flatMap(taskService::create)
                 .map(taskMapper::toDto);
     }
 

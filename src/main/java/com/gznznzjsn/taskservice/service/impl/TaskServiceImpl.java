@@ -20,7 +20,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<Task> get(Long taskId) {
+    public Mono<Task> get(String taskId) {
         return taskRepository
                 .findById(taskId)
                 .switchIfEmpty(Mono.error(
@@ -30,9 +30,23 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public Flux<Task> getAllIn(List<Long> taskIds) {
+    public Flux<Task> getAllIn(List<String> taskIds) {
         return Flux.fromIterable(taskIds)
                 .flatMap(this::get);
+    }
+
+    @Override
+    public Mono<Task> create(Task task) {
+        return Mono.just(task)
+                .map(t -> Task.builder()
+                        .name(t.getName())
+                        .duration(t.getDuration())
+
+                        .costPerHour(t.getCostPerHour())
+                        .specialization(t.getSpecialization())
+                        .build()
+                )
+                .flatMap(taskRepository::save);
     }
 
 }

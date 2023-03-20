@@ -10,4 +10,6 @@ public interface TaskMapper {
 
     TaskDto toDto(Task entity);
 
+    Task toEntity(TaskDto dto);
+
 }
