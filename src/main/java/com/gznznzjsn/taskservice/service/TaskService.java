@@ -8,8 +8,10 @@ import java.util.List;
 
 public interface TaskService {
 
-    Mono<Task> get(Long id);
+    Mono<Task> get(String taskId);
 
-    Flux<Task> getAllIn(List<Long> taskIds);
+    Flux<Task> getAllIn(List<String> taskIds);
+
+     Mono<Task> create(Task task);
 
 }

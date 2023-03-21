@@ -1,26 +1,40 @@
 package com.gznznzjsn.taskservice.persistence.repository;
 
 import com.gznznzjsn.taskservice.domain.Requirement;
-import org.springframework.data.r2dbc.repository.Query;
-import org.springframework.data.r2dbc.repository.R2dbcRepository;
+import org.springframework.data.mongodb.repository.Aggregation;
+import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
-public interface RequirementRepository extends R2dbcRepository<Requirement, Long> {
+@Repository
+public interface RequirementRepository extends ReactiveMongoRepository<Requirement, String> {
 
-    @Query("""
-            SELECT
-            requirement_id,
-            task_id,
-            tasks.specialization as task_specialization,
-            tasks.name as task_name,
-            tasks.duration as task_duration,
-            tasks.cost_per_hour as task_cost_per_hour,
-            consumable_type_id,
-            required_quantity
-            FROM requirements
-            JOIN tasks USING(task_id)
-            WHERE task_id = $1;
-            """)
-    Flux<Requirement> findAllByTaskId(Long taskId);
+    @Aggregation(pipeline = {
+            "{ $match : { task_id : ?0 } }",
+            """
+                    {
+                        $lookup: {
+                            from: tasks,
+                            let: { searchId: $task_id},
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: {
+                                            $eq: [
+                                                {
+                                                    $toString: $_id
+                                                },
+                                                $$searchId
+                                            ]
+                                        }
+                                    }
+                                }
+                            ],
+                            as: task
+                        }
+                    }
+                                                     """
+    })
+    Flux<Requirement> findAllByTask(String taskId);
 
 }

@@ -10,7 +10,7 @@ import reactor.kafka.receiver.KafkaReceiver;
 @RequiredArgsConstructor
 public class TaskReceiver {
 
-    private final KafkaReceiver<String, Long> receiver;
+    private final KafkaReceiver<String, String> receiver;
     private final RequirementService requirementService;
 
     @PostConstruct

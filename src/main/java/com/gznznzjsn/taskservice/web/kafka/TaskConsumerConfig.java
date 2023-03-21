@@ -21,7 +21,7 @@ public class TaskConsumerConfig {
     private final XML taskConsumerSettings;
 
     @Bean
-    public ReceiverOptions<String, Long> receiverOptions() {
+    public ReceiverOptions<String, String> receiverOptions() {
         XMLParser parser = new XMLParser(taskConsumerSettings);
         Map<String, Object> properties = new HashMap<>();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
@@ -32,12 +32,12 @@ public class TaskConsumerConfig {
                 parser.parse("keyDeserializerClass"));
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
                 parser.parse("valueDeserializerClass"));
-        ReceiverOptions<String, Long> receiverOptions = ReceiverOptions.create(properties);
+        ReceiverOptions<String, String> receiverOptions = ReceiverOptions.create(properties);
         return receiverOptions.subscription(Collections.singleton("tasks"));
     }
 
     @Bean
-    public KafkaReceiver<String, Long> receiver(ReceiverOptions<String, Long> receiverOptions) {
+    public KafkaReceiver<String, String> receiver(ReceiverOptions<String, String> receiverOptions) {
         return KafkaReceiver.create(receiverOptions);
     }
 

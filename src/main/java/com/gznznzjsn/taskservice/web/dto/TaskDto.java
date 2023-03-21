@@ -1,7 +1,7 @@
 package com.gznznzjsn.taskservice.web.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.gznznzjsn.taskservice.domain.Specialization;
+import com.gznznzjsn.taskservice.web.dto.group.OnCreateTask;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -11,20 +11,22 @@ import java.math.BigDecimal;
 
 public record TaskDto(
 
-        Long id,
+        String id,
 
-        @NotBlank(message = "Task name can't be blank!")
-        @Length(max = 40, message = "Too long name!")
+        @NotBlank(message = "Task name can't be blank!",groups = {OnCreateTask.class})
+        @Length(max = 40, message = "Too long name!",groups = {OnCreateTask.class})
         String name,
 
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+        @NotBlank(message = "Task name can't be blank!",groups = {OnCreateTask.class})
+        @Length(max = 40, message = "Too long specialization!",groups = {OnCreateTask.class})
         Specialization specialization,
 
-        @Positive(message = "Task duration must be positive!")
-        int duration,
+        @NotBlank(message = "Task duration can't be blank!",groups = {OnCreateTask.class})
+        @Positive(message = "Task duration must be positive!",groups = {OnCreateTask.class})
+        Integer duration,
 
-        @NotNull(message = "Cost per hour must be set!")
-        @Positive(message = "Cost per hour must be positive!")
+        @NotNull(message = "Cost per hour must be set!",groups = {OnCreateTask.class})
+        @Positive(message = "Cost per hour must be positive!",groups = {OnCreateTask.class})
         BigDecimal costPerHour
 
 ) {
