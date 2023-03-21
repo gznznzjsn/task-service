@@ -20,7 +20,7 @@ public class RequirementServiceImpl implements RequirementService {
 
     @Override
     public Flux<Requirement> retrieveAllByTaskId(String taskId) {
-        return requirementRepository.findAllB(taskId);
+        return requirementRepository.findAllByTask(taskId);
     }
 
     @Override

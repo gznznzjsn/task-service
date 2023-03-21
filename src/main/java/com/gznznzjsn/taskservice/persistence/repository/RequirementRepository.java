@@ -16,25 +16,25 @@ public interface RequirementRepository extends ReactiveMongoRepository<Requireme
                         $lookup: {
                             from: tasks,
                             let: { searchId: $task_id},
-                            "pipeline": [
+                            pipeline: [
                                 {
-                                    "$match": {
-                                        "$expr": {
-                                            "$eq": [
+                                    $match: {
+                                        $expr: {
+                                            $eq: [
                                                 {
-                                                    "$toString": "$_id"
+                                                    $toString: $_id
                                                 },
-                                                "$$searchId"
+                                                $$searchId
                                             ]
                                         }
                                     }
                                 }
                             ],
-                            "as": "task"
+                            as: task
                         }
                     }
                                                      """
     })
-    Flux<Requirement> findAllB(String taskId);
+    Flux<Requirement> findAllByTask(String taskId);
 
 }
