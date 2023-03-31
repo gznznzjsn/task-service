@@ -5,14 +5,12 @@ import com.gznznzjsn.taskservice.domain.exception.ResourceNotFoundException;
 import com.gznznzjsn.taskservice.persistence.repository.TaskRepository;
 import com.gznznzjsn.taskservice.service.TaskService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-@Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
@@ -24,7 +22,9 @@ public class TaskServiceImpl implements TaskService {
         return taskRepository
                 .findById(taskId)
                 .switchIfEmpty(Mono.error(
-                        new ResourceNotFoundException("Task with id=" + taskId + " not found!")
+                        new ResourceNotFoundException(
+                                "Task with id=" + taskId + " not found!"
+                        )
                 ));
     }
 
@@ -36,12 +36,12 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public Mono<Task> create(Task task) {
         return Mono.just(task)
                 .map(t -> Task.builder()
                         .name(t.getName())
                         .duration(t.getDuration())
-
                         .costPerHour(t.getCostPerHour())
                         .specialization(t.getSpecialization())
                         .build()
