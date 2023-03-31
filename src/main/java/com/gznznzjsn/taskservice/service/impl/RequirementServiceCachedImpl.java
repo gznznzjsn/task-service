@@ -3,6 +3,7 @@ package com.gznznzjsn.taskservice.service.impl;
 import com.gznznzjsn.taskservice.domain.Requirement;
 import com.gznznzjsn.taskservice.persistence.repository.RequirementRepository;
 import com.gznznzjsn.taskservice.web.kafka.RequirementSender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -18,6 +19,7 @@ public class RequirementServiceCachedImpl extends RequirementServiceImpl {
 
     private final ReactiveHashOperations<String, String, List<Requirement>> hashOps;
 
+    @Autowired
     public RequirementServiceCachedImpl(
             RequirementRepository requirementRepository,
             RequirementSender requirementSender,
