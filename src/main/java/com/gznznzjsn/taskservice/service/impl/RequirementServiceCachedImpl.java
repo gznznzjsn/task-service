@@ -1,9 +1,9 @@
 package com.gznznzjsn.taskservice.service.impl;
 
 import com.gznznzjsn.taskservice.domain.Requirement;
-import com.gznznzjsn.taskservice.persistence.repository.RequirementRepository;
-import com.gznznzjsn.taskservice.web.kafka.RequirementSender;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gznznzjsn.taskservice.service.RequirementService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -12,33 +12,31 @@ import reactor.util.function.Tuple2;
 
 import java.util.List;
 
+@Primary
 @Service
-public class RequirementServiceCachedImpl extends RequirementServiceImpl {
+@RequiredArgsConstructor
+public class RequirementServiceCachedImpl implements RequirementService {
 
     private static final String KEY = "requirementsByTask";
 
     private final ReactiveHashOperations<String, String, List<Requirement>> hashOps;
-
-    @Autowired
-    public RequirementServiceCachedImpl(
-            RequirementRepository requirementRepository,
-            RequirementSender requirementSender,
-            ReactiveHashOperations<String, String, List<Requirement>> hashOps
-    ) {
-        super(requirementRepository, requirementSender);
-        this.hashOps = hashOps;
-    }
+    private final RequirementServiceImpl requirementService;
 
     @Override
     public Flux<Requirement> retrieveAllByTaskId(String taskId) {
         return hashOps.get(KEY, taskId)
-                .switchIfEmpty(getFromRepositoryAndCache(taskId))
-                .flatMapMany(Flux::fromIterable);
+                .flatMapMany(Flux::fromIterable)
+                .switchIfEmpty(getFromRepositoryAndCache(taskId));
+    }
+
+    @Override
+    public Flux<Requirement> sendRequirements(String taskId) {
+        return requirementService.sendRequirements(taskId);
     }
 
     @Override
     public Mono<Requirement> create(Requirement requirement) {
-        return super.create(requirement)
+        return requirementService.create(requirement)
                 .flatMap(r -> Mono.zip(
                         Mono.just(r),
                         hashOps.remove(KEY, r.getTask().getId())
@@ -46,11 +44,12 @@ public class RequirementServiceCachedImpl extends RequirementServiceImpl {
                 .map(Tuple2::getT1);
     }
 
-    private Mono<List<Requirement>> getFromRepositoryAndCache(String taskId) {
-        return super.retrieveAllByTaskId(taskId)
+    private Flux<Requirement> getFromRepositoryAndCache(String taskId) {
+        return requirementService.retrieveAllByTaskId(taskId)
                 .collectList()
                 .flatMap(l -> hashOps.put(KEY, taskId, l)
-                        .thenReturn(l));
+                        .thenReturn(l))
+                .flatMapMany(Flux::fromIterable);
     }
 
 }
