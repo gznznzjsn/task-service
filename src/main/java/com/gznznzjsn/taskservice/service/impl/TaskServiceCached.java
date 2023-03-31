@@ -5,40 +5,36 @@ import com.gznznzjsn.taskservice.domain.exception.ResourceNotFoundException;
 import com.gznznzjsn.taskservice.persistence.repository.TaskRepository;
 import com.gznznzjsn.taskservice.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceCached implements TaskService {
 
+    private static final String KEY = "task";
+
+    private final ReactiveHashOperations<String, String, Task> hashOps;
     private final TaskRepository taskRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public Mono<Task> get(String taskId) {
-        return taskRepository
-                .findById(taskId)
-                .switchIfEmpty(Mono.error(
-                        new ResourceNotFoundException(
-                                "Task with id=" + taskId + " not found!"
-                        )
-                ));
+        return hashOps.get(KEY, taskId)
+                .switchIfEmpty(getFromRepositoryAndCache(taskId));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Flux<Task> getAllIn(List<String> taskIds) {
         return Flux.fromIterable(taskIds)
                 .flatMap(this::get);
     }
 
     @Override
-    @Transactional
     public Mono<Task> create(Task task) {
         return Mono.just(task)
                 .map(t -> Task.builder()
@@ -48,7 +44,24 @@ public class TaskServiceImpl implements TaskService {
                         .specialization(t.getSpecialization())
                         .build()
                 )
-                .flatMap(taskRepository::save);
+                .flatMap(taskRepository::save)
+                .flatMap(t -> Mono.zip(
+                        Mono.just(t),
+                        hashOps.remove(KEY, t.getId())
+                ))
+                .map(Tuple2::getT1);
+    }
+
+    private Mono<Task> getFromRepositoryAndCache(String taskId) {
+        return taskRepository
+                .findById(taskId)
+                .switchIfEmpty(Mono.error(
+                        new ResourceNotFoundException(
+                                "Task with id=" + taskId + " not found!"
+                        )
+                ))
+                .flatMap(task -> hashOps.put(KEY, taskId, task)
+                        .thenReturn(task));
     }
 
 }
