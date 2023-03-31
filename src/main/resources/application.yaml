@@ -15,15 +15,15 @@ spring:
       host: ${SPRING_DATA_MONGODB_HOST}
 
 server:
-  port: 0
+  port: 8080
 
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE-URL}
-  instance:
-    prefer-ip-address: true
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_CLIENT_SERVICE-URL}
+#  instance:
+#    prefer-ip-address: true
 
 settings:
-  requirementProducer: classpath:kafka/requirementProducer.xml
-  taskConsumer: classpath:kafka/taskConsumer.xml
+  requirementProducer: kafka/requirementProducer.xml
+  taskConsumer: kafka/taskConsumer.xml

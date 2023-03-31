@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mongodb:
+    image: mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=username
+      - MONGO_INITDB_ROOT_PASSWORD=password
+
+  redis:
+    container_name: redis
+    image: redis
+    depends_on:
+      - mongodb
+    ports:
+      - "6379:6379"
+
+  task-service:
+    env_file: .env
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: task-service
+    depends_on:
+      - redis
+
+volumes:
+  mongodb-data:
+    driver: local
