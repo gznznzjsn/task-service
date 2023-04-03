@@ -13,16 +13,11 @@ spring:
       port: ${SPRING_DATA_MONGODB_PORT}
       database: ${SPRING_DATA_MONGODB_DATABASE}
       host: ${SPRING_DATA_MONGODB_HOST}
-
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: ${SPRING_DATA_REDIS_PORT}
 server:
   port: 8080
-
-#eureka:
-#  client:
-#    service-url:
-#      defaultZone: ${EUREKA_CLIENT_SERVICE-URL}
-#  instance:
-#    prefer-ip-address: true
 
 settings:
   requirementProducer: kafka/requirementProducer.xml
