@@ -30,6 +30,7 @@ public class RequirementServiceCached implements RequirementService {
     @Override
     public Flux<Requirement> retrieveAllByTaskId(String taskId) {
         return hashOps.get(KEY, taskId)
+                .doOnNext(requirements -> log.info("From cache: {}", requirements))
                 .flatMapMany(Flux::fromIterable)
                 .switchIfEmpty(getFromRepositoryAndCache(taskId));
     }

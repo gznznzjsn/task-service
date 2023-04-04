@@ -17,6 +17,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
@@ -50,7 +51,7 @@ public class RepositoryConfig {
                 redisConnectionFactory,
                 RedisSerializationContext.<String, List<Requirement>>newSerializationContext(new StringRedisSerializer())
                         .hashKey(new GenericToStringSerializer<>(String.class))
-                        .hashValue(new Jackson2JsonRedisSerializer<>(List.class))
+                        .hashValue(new Jackson2JsonRedisSerializer<>(ArrayList.class))
                         .build()
         );
         return template.opsForHash();
