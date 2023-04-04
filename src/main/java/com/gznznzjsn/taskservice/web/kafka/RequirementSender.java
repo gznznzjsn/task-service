@@ -4,11 +4,13 @@ import com.gznznzjsn.taskservice.domain.Requirement;
 import com.gznznzjsn.taskservice.web.kafka.parser.XMLParser;
 import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderRecord;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class RequirementSender {
@@ -27,7 +29,7 @@ public class RequirementSender {
                                 requirement,
                                 null
                         )
-                )
+                ).doOnNext(r -> log.info("Sent {}", r))
         ).subscribe();
     }
 
