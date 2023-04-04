@@ -19,6 +19,7 @@ public class RequirementSender {
     private final KafkaSender<String, Requirement> sender;
 
     public void send(Requirement requirement) {
+        log.info("Started sending of {}", requirement);
         this.sender.send(
                 Mono.just(
                         SenderRecord.create(
