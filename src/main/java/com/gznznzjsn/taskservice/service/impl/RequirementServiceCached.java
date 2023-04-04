@@ -7,6 +7,7 @@ import com.gznznzjsn.taskservice.persistence.repository.RequirementRepository;
 import com.gznznzjsn.taskservice.service.RequirementService;
 import com.gznznzjsn.taskservice.web.kafka.RequirementSender;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ReactiveHashOperations;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -15,6 +16,7 @@ import reactor.util.function.Tuple2;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RequirementServiceCached implements RequirementService {
@@ -35,6 +37,7 @@ public class RequirementServiceCached implements RequirementService {
     @Override
     public Flux<Requirement> sendRequirements(String taskId) {
         return retrieveAllByTaskId(taskId)
+                .doOnNext(requirement -> log.info("Retrieved {}", requirement))
                 .doOnNext(requirementSender::send);
     }
 
