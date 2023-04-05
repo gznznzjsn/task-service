@@ -1,8 +1,6 @@
 package com.gznznzjsn.taskservice.web.kafka;
 
 import com.gznznzjsn.taskservice.domain.Requirement;
-import com.gznznzjsn.taskservice.web.kafka.parser.XMLParser;
-import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -15,7 +13,6 @@ import reactor.kafka.sender.SenderRecord;
 @RequiredArgsConstructor
 public class RequirementSender {
 
-    private final XML requirementProducerSettings;
     private final KafkaSender<String, Requirement> sender;
 
     public void send(Requirement requirement) {
@@ -26,7 +23,7 @@ public class RequirementSender {
                                 "requirement",
                                 0,
                                 System.currentTimeMillis(),
-                                new XMLParser(requirementProducerSettings).parse("requirementKey"),
+                                String.valueOf(requirement.hashCode()),
                                 requirement,
                                 null
                         )
