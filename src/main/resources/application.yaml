@@ -5,6 +5,8 @@ spring:
     default-property-inclusion: NON_NULL
   config:
     import: optional:.env[.properties]
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP-SERVERS}
   data:
     mongodb:
       authentication-database: ${SPRING_DATA_MONGODB_AUTHENTICATION-DATABASE}
@@ -13,17 +15,12 @@ spring:
       port: ${SPRING_DATA_MONGODB_PORT}
       database: ${SPRING_DATA_MONGODB_DATABASE}
       host: ${SPRING_DATA_MONGODB_HOST}
-
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST}
+      port: ${SPRING_DATA_REDIS_PORT}
 server:
-  port: 0
-
-eureka:
-  client:
-    service-url:
-      defaultZone: ${EUREKA_CLIENT_SERVICE-URL}
-  instance:
-    prefer-ip-address: true
+  port: 8080
 
 settings:
-  requirementProducer: classpath:kafka/requirementProducer.xml
-  taskConsumer: classpath:kafka/taskConsumer.xml
+  requirementProducer: kafka/requirementProducer.xml
+  taskConsumer: kafka/taskConsumer.xml

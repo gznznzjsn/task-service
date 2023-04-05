@@ -6,6 +6,7 @@ import com.gznznzjsn.taskservice.persistence.converter.RequirementReadConverter;
 import com.gznznzjsn.taskservice.persistence.converter.RequirementWriteConverter;
 import com.gznznzjsn.taskservice.persistence.converter.TaskReadConverter;
 import com.gznznzjsn.taskservice.persistence.converter.TaskWriteConverter;
+import com.gznznzjsn.taskservice.persistence.serializer.RequirementListSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
@@ -50,7 +51,7 @@ public class RepositoryConfig {
                 redisConnectionFactory,
                 RedisSerializationContext.<String, List<Requirement>>newSerializationContext(new StringRedisSerializer())
                         .hashKey(new GenericToStringSerializer<>(String.class))
-                        .hashValue(new Jackson2JsonRedisSerializer<>(List.class))
+                        .hashValue(new RequirementListSerializer())
                         .build()
         );
         return template.opsForHash();

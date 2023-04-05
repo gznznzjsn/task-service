@@ -17,6 +17,7 @@
     <description>task-service</description>
 
     <properties>
+        <start-class>com.gznznzjsn.taskservice.TaskServiceApplication</start-class>
         <java.version>19</java.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
@@ -38,8 +39,9 @@
             <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -98,6 +100,10 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.gznznzjsn.taskservice.TaskServiceApplication</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
