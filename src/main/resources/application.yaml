@@ -6,18 +6,18 @@ spring:
   config:
     import: optional:.env[.properties]
   kafka:
-    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP-SERVERS}
+    bootstrap-servers: ${APP_KAFKA_BOOTSTRAP-SERVERS}
   data:
     mongodb:
-      authentication-database: ${SPRING_DATA_MONGODB_AUTHENTICATION-DATABASE}
-      username: ${SPRING_DATA_MONGODB_USERNAME}
-      password: ${SPRING_DATA_MONGODB_PASSWORD}
-      port: ${SPRING_DATA_MONGODB_PORT}
-      database: ${SPRING_DATA_MONGODB_DATABASE}
-      host: ${SPRING_DATA_MONGODB_HOST}
+      authentication-database: ${APP_DATA_MONGODB_AUTHENTICATION-DATABASE}
+      username: ${APP_DATA_MONGODB_USERNAME}
+      password: ${APP_DATA_MONGODB_PASSWORD}
+      port: ${APP_DATA_MONGODB_PORT}
+      database: ${APP_DATA_MONGODB_DATABASE}
+      host: ${APP_DATA_MONGODB_HOST}
     redis:
-      host: ${SPRING_DATA_REDIS_HOST}
-      port: ${SPRING_DATA_REDIS_PORT}
+      host: ${APP_DATA_REDIS_HOST}
+      port: ${APP_DATA_REDIS_PORT}
 server:
   port: 8080
 
