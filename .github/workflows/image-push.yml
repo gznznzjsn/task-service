@@ -48,4 +48,4 @@ jobs:
           cd $HOME
           wget https://dl.k8s.io/release/v1.26.0/bin/linux/arm64/kubectl
           chmod +x ./kubectl
-          ~/kubectl rollout restart deployment employee-service -n default
+          ~/kubectl rollout restart deployment task-service -n default
