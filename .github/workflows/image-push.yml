@@ -2,9 +2,9 @@ name: Build and Push to Docker Hub
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "k8s" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "k8s" ]
 
 jobs:
 
