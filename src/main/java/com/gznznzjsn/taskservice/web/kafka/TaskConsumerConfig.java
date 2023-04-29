@@ -24,8 +24,6 @@ public class TaskConsumerConfig {
     public ReceiverOptions<String, String> receiverOptions() {
         XMLParser parser = new XMLParser(taskConsumerSettings);
         Map<String, Object> properties = new HashMap<>();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                parser.parse("bootstrapServers"));
         properties.put(ConsumerConfig.GROUP_ID_CONFIG,
                 parser.parse("groupId"));
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,

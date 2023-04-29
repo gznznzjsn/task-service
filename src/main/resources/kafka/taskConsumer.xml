@@ -2,7 +2,6 @@
 <taskConsumer>
     <requiredTaskKey>requiredTask</requiredTaskKey>
     <groupId>taskConsumer</groupId>
-    <bootstrapServers>kafka-service:9092</bootstrapServers>
     <keyDeserializerClass>org.apache.kafka.common.serialization.StringDeserializer</keyDeserializerClass>
     <valueDeserializerClass>org.apache.kafka.common.serialization.StringDeserializer</valueDeserializerClass>
 </taskConsumer>
