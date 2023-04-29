@@ -5,6 +5,7 @@ import com.gznznzjsn.taskservice.web.kafka.parser.XMLParser;
 import com.jcabi.xml.XML;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import reactor.kafka.receiver.KafkaReceiver;
@@ -18,16 +19,19 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TaskConsumerConfig {
 
+    @Value("${spring.kafka.bootstrap-servers}")
+    private String bootstrapServers;
+
     private final XML taskConsumerSettings;
 
     @Bean
     public ReceiverOptions<String, String> receiverOptions() {
         XMLParser parser = new XMLParser(taskConsumerSettings);
         Map<String, Object> properties = new HashMap<>();
-        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                parser.parse("bootstrapServers"));
         properties.put(ConsumerConfig.GROUP_ID_CONFIG,
                 parser.parse("groupId"));
+        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                bootstrapServers);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
                 parser.parse("keyDeserializerClass"));
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
